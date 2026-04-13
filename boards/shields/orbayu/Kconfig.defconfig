@@ -1,0 +1,44 @@
+if SHIELD_ORBAYU_RIGHT
+
+config SPI
+    default y
+
+config ZMK_POINTING
+    default y
+
+config PAW3222
+    default y
+
+endif # SHIELD_ORBAYU_RIGHT
+
+if SHIELD_ORBAYU_LEFT || SHIELD_ORBAYU_RIGHT
+
+config ZMK_SPLIT
+    default y
+
+config RGBLED_WIDGET_BATTERY_LEVEL_HIGH
+    default 30
+
+config RGBLED_WIDGET_BATTERY_LEVEL_CRITICAL
+    default 10
+
+endif # SHIELD_ORBAYU_LEFT || SHIELD_ORBAYU_RIGHT
+
+if SHIELD_ORBAYU_DONGLE
+
+config ZMK_KEYBOARD_NAME
+    default "Orbayu"
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+config ZMK_SPLIT
+    default y
+
+config ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS
+    default 1
+
+config ZMK_BLE
+    default y
+
+endif # SHIELD_ORBAYU_DONGLE

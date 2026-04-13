@@ -6,9 +6,24 @@ manifest:
       url-base: https://github.com/zmkfirmware
     # Additional modules containing boards/shields/custom code can be listed here as well
     # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
+    - name: sekigon-gonnoc # <-- PAW3222
+      url-base: https://github.com/sekigon-gonnoc
+    - name: caksoylar # <-- RGB LED
+      url-base: https://github.com/caksoylar
+    - name: carrefinho # <-- Prospector dongle
+      url-base: https://github.com/carrefinho
   projects:
     - name: zmk
       remote: zmkfirmware
       import: app/west.yml
+    - name: zmk-driver-paw3222
+      remote: sekigon-gonnoc
+      revision: main
+    - name: zmk-rgbled-widget
+      remote: caksoylar
+      revision: main
+    - name: prospector-zmk-module
+      remote: carrefinho
+      revision: feat/new-status-screens
   self:
     path: config
