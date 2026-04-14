@@ -1,6 +1,5 @@
-// Orbayu left half keymap — 23 keys + EC11 encoder.
+// Orbayu keymap — 44 keys (23 left + 21 right) + EC11 encoder on left.
 // Replace &trans placeholders with real bindings.
-// See https://zmk.dev/docs/development/hardware-integration/new-shield#default-keymap
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
@@ -11,17 +10,22 @@
 
         default_layer {
             /*
-             *  col:    0       1       2       3       4       5
-             * row0: _______ _______ _______ _______ _______ _______
-             * row1: _______ _______ _______ _______ _______ _______
-             * row2: _______ _______ _______ _______ _______ _______
-             * row3: _______ _______ _______ _______ _______
+             * LEFT (23 keys)                      RIGHT (21 keys)
+             *  col: 0  1  2  3  4  5               col: 0  1  2  3  4  5
+             * row0: __ __ __ __ __ __          row0:    __ __ __ __ __
+             * row1: __ __ __ __ __ __          row1: __ __ __ __ __ __
+             * row2: __ __ __ __ __ __          row2: __ __ __ __ __ __
+             * row3: __ __ __ __ __             row3: __ __          __ __
              */
             bindings = <
-                &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans
+                /* LEFT row0 */ &trans &trans &trans &trans &trans &trans
+                /* LEFT row1 */ &trans &trans &trans &trans &trans &trans
+                /* LEFT row2 */ &trans &trans &trans &trans &trans &trans
+                /* LEFT row3 */ &trans &trans &trans &trans &trans
+                /* RIGHT row0 */       &trans &trans &trans &trans &trans
+                /* RIGHT row1 */ &trans &trans &trans &trans &trans &trans
+                /* RIGHT row2 */ &trans &trans &trans &trans &trans &trans
+                /* RIGHT row3 */ &trans &trans                     &trans &trans
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;

@@ -1,12 +1,18 @@
-// This file was generated from a template. Edit it to match your keyboard.
-// See https://zmk.dev/docs/development/hardware-integration/new-shield for more
-// instructions.
-
+#include <dt-bindings/pinctrl/nrf-pinctrl.h>
 #include "orbayu.dtsi"
 
+/*
+ * P0.31 (COL1_R) conflicts with the XIAO BLE battery ADC (AIN7 = P0.31).
+ * Disable battery measurement on the right half; the dongle proxies it.
+ */
+/ {
+    chosen {
+        /delete-property/ zmk,battery;
+    };
+};
+
 &default_transform {
-    // Set this to the number of columns on the left side.
-    col-offset = <2>;
+    col-offset = <6>;
 };
 
 / {
@@ -16,14 +22,57 @@
         wakeup-source;
 
         row-gpios
-            = <&xiao_d 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&xiao_d 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            = <&gpio0  2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* ROW0 = D0  (P0.02) */
+            , <&gpio0  3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* ROW1 = D1  (P0.03) */
+            , <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* ROW2 = D3  (P0.29) */
+            , <&gpio0 28 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* ROW3 = D2  (P0.28) */
             ;
-        // Replace these comments with the GPIO pins for the right side.
-        // See https://zmk.dev/docs/development/hardware-integration/new-shield#shield-overlays
         col-gpios
-            = <&xiao_d 0 GPIO_ACTIVE_HIGH>
-            , <&xiao_d 0 GPIO_ACTIVE_HIGH>
+            = <&gpio1 11 GPIO_ACTIVE_HIGH>  /* COL0 = D6  (P1.11) */
+            , <&gpio0 31 GPIO_ACTIVE_HIGH>  /* COL1 = D16 (P0.31) ⚠ bat ADC disabled */
+            , <&gpio0  5 GPIO_ACTIVE_HIGH>  /* COL2 = D5  (P0.05) */
+            , <&gpio0 10 GPIO_ACTIVE_HIGH>  /* COL3 = D15 (P0.10 / NFC2) */
+            , <&gpio0  4 GPIO_ACTIVE_HIGH>  /* COL4 = D4  (P0.04) */
+            , <&gpio0  9 GPIO_ACTIVE_HIGH>  /* COL5 = D14 (P0.09 / NFC1) */
             ;
+    };
+};
+
+/*
+ * PAW3222 trackball via SPI.
+ * SDIO is bidirectional: MOSI and MISO both mapped to P1.14 (D9).
+ * P1.15 (D10) repurposed as MOTION IRQ (not used as SPI MOSI).
+ */
+&pinctrl {
+    spi_paw3222_default: spi_paw3222_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK,  1, 13)>,  /* D8  (P1.13) */
+                    <NRF_PSEL(SPIM_MOSI, 1, 14)>,  /* D9  (P1.14 / SDIO) */
+                    <NRF_PSEL(SPIM_MISO, 1, 14)>;  /* D9  (P1.14 / SDIO, same pin) */
+        };
+    };
+    spi_paw3222_sleep: spi_paw3222_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK,  1, 13)>,
+                    <NRF_PSEL(SPIM_MOSI, 1, 14)>,
+                    <NRF_PSEL(SPIM_MISO, 1, 14)>;
+            low-power-enable;
+        };
+    };
+};
+
+&xiao_spi {
+    status = "okay";
+    compatible = "nordic,nrf-spim";
+    pinctrl-0 = <&spi_paw3222_default>;
+    pinctrl-1 = <&spi_paw3222_sleep>;
+    pinctrl-names = "default", "sleep";
+    cs-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;  /* NCS = D7 (P1.12) */
+
+    trackball: trackball@0 {
+        compatible = "pixart,paw3222";
+        reg = <0>;
+        spi-max-frequency = <2000000>;
+        irq-gpios = <&gpio1 15 GPIO_ACTIVE_LOW>;  /* MOTION = D10 (P1.15) */
     };
 };
