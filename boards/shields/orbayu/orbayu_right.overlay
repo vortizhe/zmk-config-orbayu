@@ -9,11 +9,21 @@
     col-offset = <2>;
 };
 
-&kscan {
-    // Replace these comments with the GPIO pins in the matrix for the right side.
-    // See https://zmk.dev/docs/development/hardware-integration/new-shield#shield-overlays
-    col-gpios
-        = <&xiao_d 0 GPIO_ACTIVE_HIGH>
-        , <&xiao_d 0 GPIO_ACTIVE_HIGH>
-        ;
+/ {
+    kscan: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        diode-direction = "col2row";
+        wakeup-source;
+
+        row-gpios
+            = <&xiao_d 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&xiao_d 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            ;
+        // Replace these comments with the GPIO pins for the right side.
+        // See https://zmk.dev/docs/development/hardware-integration/new-shield#shield-overlays
+        col-gpios
+            = <&xiao_d 0 GPIO_ACTIVE_HIGH>
+            , <&xiao_d 0 GPIO_ACTIVE_HIGH>
+            ;
+    };
 };
