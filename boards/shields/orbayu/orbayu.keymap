@@ -1,20 +1,30 @@
-// This file was generated from a template. Edit it to match your keyboard.
-// See https://zmk.dev/docs/development/hardware-integration/new-shield for more instructions.
+// Orbayu left half keymap — 23 keys + EC11 encoder.
+// Replace &trans placeholders with real bindings.
+// See https://zmk.dev/docs/development/hardware-integration/new-shield#default-keymap
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 
 / {
-    // Define a default keymap here.
-    // See https://zmk.dev/docs/development/hardware-integration/new-shield#default-keymap.
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
+            /*
+             *  col:    0       1       2       3       4       5
+             * row0: _______ _______ _______ _______ _______ _______
+             * row1: _______ _______ _______ _______ _______ _______
+             * row2: _______ _______ _______ _______ _______ _______
+             * row3: _______ _______ _______ _______ _______
+             */
             bindings = <
-                &kp N1 &kp N2    &kp N3 &kp N4
-                &kp A  &kp B     &kp C  &kp D
+                &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans
             >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
     };
 };

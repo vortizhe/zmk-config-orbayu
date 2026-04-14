@@ -1,7 +1,3 @@
-// This file was generated from a template. Edit it to match your keyboard.
-// See https://zmk.dev/docs/development/hardware-integration/new-shield for more
-// instructions.
-
 #include "orbayu.dtsi"
 
 / {
@@ -11,14 +7,22 @@
         wakeup-source;
 
         row-gpios
-            = <&xiao_d 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&xiao_d 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            = <&gpio0 28 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* row0 = D2  (P0.28) */
+            , <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* row1 = D3  (P0.29) */
+            , <&gpio0  4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* row2 = D4  (P0.04) */
+            , <&gpio0  5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* row3 = D5  (P0.05) */
             ;
-        // Replace these comments with the GPIO pins for the left side.
-        // See https://zmk.dev/docs/development/hardware-integration/new-shield#shield-overlays
         col-gpios
-            = <&xiao_d 0 GPIO_ACTIVE_HIGH>
-            , <&xiao_d 0 GPIO_ACTIVE_HIGH>
+            = <&gpio1 15 GPIO_ACTIVE_HIGH>   /* col0 = D10 (P1.15) */
+            , <&gpio1 14 GPIO_ACTIVE_HIGH>   /* col1 = D9  (P1.14) */
+            , <&gpio1  5 GPIO_ACTIVE_HIGH>   /* col2 = D18 (P1.05) */
+            , <&gpio1 13 GPIO_ACTIVE_HIGH>   /* col3 = D8  (P1.13) */
+            , <&gpio1  3 GPIO_ACTIVE_HIGH>   /* col4 = D17 (P1.03) */
+            , <&gpio1 12 GPIO_ACTIVE_HIGH>   /* col5 = D7  (P1.12) */
             ;
     };
+};
+
+&encoder_0 {
+    status = "okay";
 };
