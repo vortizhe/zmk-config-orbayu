@@ -13,13 +13,12 @@
 
         //                           w    h     x     y   rot   rx   ry
         keys
-        /* LEFT — row0 (6 keys, cols 0-5) */
+        /* LEFT — row0 (5 keys) */
             = <&key_physical_attrs 100 100     0     0     0    0    0>
             , <&key_physical_attrs 100 100   100     0     0    0    0>
             , <&key_physical_attrs 100 100   200     0     0    0    0>
             , <&key_physical_attrs 100 100   300     0     0    0    0>
             , <&key_physical_attrs 100 100   400     0     0    0    0>
-            , <&key_physical_attrs 100 100   500     0     0    0    0>
         /* LEFT — row1 (6 keys) */
             , <&key_physical_attrs 100 100     0   100     0    0    0>
             , <&key_physical_attrs 100 100   100   100     0    0    0>
@@ -34,12 +33,13 @@
             , <&key_physical_attrs 100 100   300   200     0    0    0>
             , <&key_physical_attrs 100 100   400   200     0    0    0>
             , <&key_physical_attrs 100 100   500   200     0    0    0>
-        /* LEFT — row3 (5 keys, col5 absent) */
+        /* LEFT — row3 (6 keys) */
             , <&key_physical_attrs 100 100     0   300     0    0    0>
             , <&key_physical_attrs 100 100   100   300     0    0    0>
             , <&key_physical_attrs 100 100   200   300     0    0    0>
             , <&key_physical_attrs 100 100   300   300     0    0    0>
             , <&key_physical_attrs 100 100   400   300     0    0    0>
+            , <&key_physical_attrs 100 100   500   300     0    0    0>
         /* RIGHT — row0 (5 keys, col0 absent; gap of 200 between halves) */
             , <&key_physical_attrs 100 100   800     0     0    0    0>
             , <&key_physical_attrs 100 100   900     0     0    0    0>

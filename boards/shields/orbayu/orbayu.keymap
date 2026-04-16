@@ -9,19 +9,20 @@
         compatible = "zmk,keymap";
 
         default_layer {
+            display-name = "Base";
             /*
-             * LEFT (23 keys)                      RIGHT (21 keys)
-             *  col: 0  1  2  3  4  5               col: 0  1  2  3  4  5
-             * row0: __ __ __ __ __ __          row0:    __ __ __ __ __
+             * LEFT (23 keys)                   RIGHT (21 keys)
+             *  col: 0  1  2  3  4  5            col: 0  1  2  3  4  5
+             * row0: __ __ __ __ __             row0:    __ __ __ __ __
              * row1: __ __ __ __ __ __          row1: __ __ __ __ __ __
              * row2: __ __ __ __ __ __          row2: __ __ __ __ __ __
-             * row3: __ __ __ __ __             row3: __ __          __ __
+             * row3: __ __ __ __ __ __          row3: __ __       __ __
              */
             bindings = <
-                /* LEFT row0 */ &trans &trans &trans &trans &trans &trans
+                /* LEFT row0 */ &kp Q &kp W &kp E &kp R &kp T
                 /* LEFT row1 */ &trans &trans &trans &trans &trans &trans
                 /* LEFT row2 */ &trans &trans &trans &trans &trans &trans
-                /* LEFT row3 */ &trans &trans &trans &trans &trans
+                /* LEFT row3 */ &trans &trans &trans &trans &trans &trans
                 /* RIGHT row0 */       &trans &trans &trans &trans &trans
                 /* RIGHT row1 */ &trans &trans &trans &trans &trans &trans
                 /* RIGHT row2 */ &trans &trans &trans &trans &trans &trans
