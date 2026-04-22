@@ -9,9 +9,6 @@ config ZMK_POINTING
 config PAW3222
     default y
 
-config NFCT_PINS_AS_GPIOS
-    default y
-
 endif # SHIELD_ORBAYU_RIGHT
 
 if SHIELD_ORBAYU_LEFT || SHIELD_ORBAYU_RIGHT

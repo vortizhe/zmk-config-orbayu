@@ -3,7 +3,7 @@
 #include "orbayu.dtsi"
 
 // SCROLL layer index — must match orbayu.keymap.
-#define SCROLL 6
+#define SCROLL 5
 
 /*
  * P0.31 (COL1_R) conflicts with the XIAO BLE battery ADC (AIN7 = P0.31).
@@ -13,6 +13,10 @@
     chosen {
         /delete-property/ zmk,battery;
     };
+};
+
+&uicr {
+        nfct-pins-as-gpios;
 };
 
 &default_transform {

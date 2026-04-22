@@ -3,11 +3,10 @@
 // Layer index:
 //   0 = Base   — QWERTY + modifiers
 //   1 = Num    — numbers, brackets, symbols shortcut
-//   2 = Sym    — symbols, F-keys, mouse buttons
-//   3 = Nav    — navigation, volume encoder
-//   4 = BT     — Bluetooth profile management
-//   5 = MOUSE  — mouse buttons (trackball moves cursor by default)
-//   6 = SCROLL — trackball movement remapped to scroll wheel
+//   2 = Sym/Nav    — symbols, navigation, volume encoder
+//   3 = BT     — Bluetooth profile management
+//   4 = MOUSE  — mouse buttons (trackball moves cursor by default)
+//   5 = SCROLL — trackball movement remapped to scroll wheel
 //
 // Key positions (binding-array order, 0-indexed):
 //
@@ -30,8 +29,8 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
-#define MOUSE  5
-#define SCROLL 6
+#define MOUSE  4
+#define SCROLL 5
 
 &mt {
     flavor = "balanced";
@@ -47,16 +46,19 @@
     combos {
         compatible = "zmk,combos";
 
-        // S + D → TAB
-        tab {
+        combo_tab {
             bindings = <&kp TAB>;
             key-positions = <11 12>;
         };
 
-        // lt(2,ENTER) + lt(3,DEL) → hold for BT layer, tap ESC
-        layer4_esc {
-            bindings = <&lt 4 ESC>;
-            key-positions = <38 39>;
+        combo_esc {
+            bindings = <&kp ESC>;
+            key-positions = <39 40>;
+        };
+
+        combo_btlayer {
+            bindings = <&tog 3>;
+            key-positions = <14 38>;
         };
     };
 
@@ -81,158 +83,74 @@
     keymap {
         compatible = "zmk,keymap";
 
-        // ─────────────────────────────────────────────
-        //  Layer 0 — Base (QWERTY)
-        // ─────────────────────────────────────────────
-        //  Q   W   E   R   T  │  Y   U   I   O   P
-        //  A   S   D   F   G  ·  │  ·  H   J   K   L   ;
-        // ⇧Z   X   C   V   B  ·  │  ·  N   M   ,   .   /
-        // Ctl Gui  ·  Bsp ⏎②  ③  │ ③  ⎵①          Alt  ·
         default_layer {
             display-name = "Base";
             bindings = <
-/* row 0 */ &kp Q           &kp W        &kp E         &kp R          &kp T
-            &kp Y           &kp U        &kp I         &kp O          &kp P
-/* row 1 */ &kp A           &kp S        &kp D         &kp F          &kp G        &trans
-            &trans          &kp H        &kp J         &kp K          &kp L        &kp SEMICOLON
-/* row 2 */ &mt LSHIFT Z    &kp X        &kp C         &kp V          &kp B        &trans
-            &trans          &kp N        &kp M         &kp COMMA      &kp DOT      &kp SLASH
-/* row 3 */ &kp LCTRL       &kp LGUI     &trans        &kp BACKSPACE  &lt 2 ENTER  &lt 3 DEL
-            &lt 3 ESC       &lt 1 SPACE
-            &kp LALT        &trans
+/* col      1           2           3           4           5           6           7           8           9           10           11         12 */
+/* row 0 */ &kp Q       &kp W       &kp E       &kp R       &kp T                               &kp Y       &kp U       &kp I        &kp O      &kp P
+/* row 1 */ &kp A       &kp S       &kp D       &kp F       &kp G       &trans      &kp GRAVE   &kp H       &kp J       &kp K        &kp L      &kp SEMICOLON
+/* row 2 */ &kp Z       &kp X       &kp C       &kp V       &kp B       &kp LT      &kp GT      &kp N       &kp M       &kp COMMA    &kp DOT    &kp SLASH
+/* row 3 */ &kp LSHIFT  &kp LCTRL   &kp LALT    &kp LGUI    &kp ENTER   &mo 1       &mo 2   &kp SPACE                                &kp SQT    &kp BSPC
             >;
             sensor-bindings = <&scroll_up_down>;
         };
 
-        // ─────────────────────────────────────────────
-        //  Layer 1 — Num
-        // ─────────────────────────────────────────────
-        //  1   2   3   4   5  │  6   7   8   9   0
-        //  ·   ·   [   ]   ·  ·  │  ·  ·   (   )   ·   \
-        //  ·   ·   ·   ·   ·  ·  │  ·  ·   ·   ·   ·   |
-        //  ·   ·   ·   ·   ·  ·  │  ·  ·           ·   ·
         layer_1 {
             display-name = "Num";
             bindings = <
-/* row 0 */ &kp N1   &kp N2   &kp N3           &kp N4            &kp N5
-            &kp N6   &kp N7   &kp N8            &kp N9            &kp N0
-/* row 1 */ &trans   &trans   &kp LEFT_BRACKET  &kp RIGHT_BRACKET &trans   &trans
-            &trans   &trans   &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &trans   &kp BACKSLASH
-/* row 2 */ &trans   &trans   &trans            &trans            &trans   &trans
-            &trans   &trans   &trans            &trans            &trans   &kp PIPE
-/* row 3 */ &trans   &trans   &trans            &trans            &trans   &trans
-            &trans   &trans
-            &trans   &trans
-            >;
-            sensor-bindings = <&scroll_right_left>;
-        };
-
-        // ─────────────────────────────────────────────
-        //  Layer 2 — Sym
-        // ─────────────────────────────────────────────
-        //  !   @   #   $   %  │  ^   &   *   -   _
-        //  `   ~   "   '   ·  ·  │  ·  🖱3  🖱1  🖱2  =   +
-        // F1  F2  F3  F4  F5 F11 │F12  F6  F7  F8  F9  F10
-        //  ·   ·   ·   ·   ·  ·  │  ·  ·           ·   ·
-        layer_2 {
-            display-name = "Sym";
-            bindings = <
-/* row 0 */ &kp EXCLAMATION  &kp AT_SIGN  &kp POUND          &kp DOLLAR  &kp PERCENT
-            &kp CARET        &kp AMPERSAND &kp ASTERISK       &kp MINUS   &kp UNDERSCORE
-/* row 1 */ &kp GRAVE        &kp TILDE    &kp DOUBLE_QUOTES  &kp SQT     &trans          &trans
-            &trans           &mkp MB3     &mkp MB1           &mkp MB2    &kp EQUAL       &kp PLUS
-/* row 2 */ &kp F1           &kp F2       &kp F3             &kp F4      &kp F5          &kp F11
-            &kp F12          &kp F6       &kp F7             &kp F8      &kp F9          &kp F10
-/* row 3 */ &trans           &trans       &trans             &trans      &trans          &trans
-            &trans           &trans
-            &trans           &trans
-            >;
-            sensor-bindings = <&scroll_up_down>;
-        };
-
-        // ─────────────────────────────────────────────
-        //  Layer 3 — Nav  (encoder = volume)
-        // ─────────────────────────────────────────────
-        //  ·  ⇥←  PrtSc  ⇥→  ·  │  ·  Home  ↑  End   ·
-        //  · ⌘←  ⌘→  ⌃⌘←  ⌃⌘→  ·  │  ·   ·   ←  ↓  →   ·
-        //  ·  ⇧  ⌘⇧←  ⌘⇧→  ·   ·  │  ·   ·  Del PgUp PgDn ·
-        //  ·   ·   ·   ·   ·   ·  │  ·   ·           ·   ·
-        layer_3 {
-            display-name = "Nav";
-            bindings = <
-/* row 0 */ &trans   &kp LC(LS(TAB))     &kp PRINTSCREEN        &kp LC(TAB)             &trans
-            &trans   &kp HOME            &kp UP_ARROW           &kp END                 &trans
-/* row 1 */ &trans   &kp LG(LEFT_ARROW)  &kp LG(RIGHT_ARROW)    &kp LC(LG(LEFT_ARROW))  &kp LC(LG(RIGHT_ARROW))  &trans
-            &trans   &trans              &kp LEFT_ARROW         &kp DOWN_ARROW          &kp RIGHT_ARROW          &trans
-/* row 2 */ &trans   &kp LSHIFT          &kp LG(LS(LEFT_ARROW)) &kp LG(LS(RIGHT_ARROW)) &trans                   &trans
-            &trans   &trans              &kp DELETE             &kp PAGE_UP             &kp PAGE_DOWN            &trans
-/* row 3 */ &trans   &trans              &trans                 &trans                  &trans                   &trans
-            &trans   &trans
-            &trans   &trans
+/* col      1           2           3           4           5           6           7           8           9           10           11         12 */
+/* row 0 */ &kp N1      &kp N2      &kp N3      &kp N4      &kp N5                              &kp N6      &kp N7      &kp N8       &kp N9     &kp N0
+/* row 1 */ &trans      &trans      &kp LBKT    &kp RBKT    &trans      &trans      &trans      &trans      &kp LPAR    &kp RPAR     &trans     &kp BACKSLASH
+/* row 2 */ &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans       &trans     &kp PIPE
+/* row 3 */ &kp ESC     &trans      &trans      &trans      &trans      &trans      &trans      &trans                               &trans     &kp DEL
             >;
             sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP>;
         };
 
-        // ─────────────────────────────────────────────
-        //  Layer 4 — BT
-        // ─────────────────────────────────────────────
-        //  ·   ·   ·   ·   ·  │ BT0 BT1 BT2 BT3 BT4
-        //  ·   ·   ·   ·   ·  ·  │  ·   ·   ·   ·   ·   ·
-        //  ·   ·   ·   ·   ·  ·  │BOOT  ·   ·   ·   ·  CLR
-        //  ·   ·   ·   ·   ·  ·  │  ·   ·         CLR_ALL ·
-        layer_4 {
+        layer_2 {
+            display-name = "Sym/Nav";
+            bindings = <
+/* col      1           2           3           4           5           6           7           8           9           10           11         12 */
+/* row 0 */ &kp EXCL    &kp AT      &kp DOLLAR  &kp DOLLAR  &kp PERCENT                         &kp CARET   &kp AMPS    &kp ASTERISK &kp MINUS  &kp UNDERSCORE
+/* row 1 */ &kp GRAVE   &kp TILDE   &kp DQT     &kp SQT     &trans      &trans      &kp C_PP    &trans      &kp UP      &trans       &kp EQUAL  &kp PLUS
+/* row 2 */ &kp F1      &kp F2      &kp F3      &kp F4      &kp F5      &kp C_PREV  &kp C_NEXT  &kp LEFT    &kp DOWN    &kp RIGHT    &kp F9     &kp F10
+/* row 3 */ &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans                               &trans     &trans
+            >;
+            sensor-bindings = <&scroll_right_left>;
+        };
+
+        layer_3 {
             display-name = "BT";
             bindings = <
-/* row 0 */ &trans        &trans        &trans        &trans        &trans
-            &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-/* row 1 */ &trans   &trans   &trans   &trans   &trans   &trans
-            &trans   &trans   &trans   &trans   &trans   &trans
-/* row 2 */ &trans        &trans   &trans   &trans   &trans   &trans
-            &bootloader   &trans   &trans   &trans   &trans   &bt BT_CLR
-/* row 3 */ &trans   &trans   &trans   &trans   &trans   &trans
-            &trans   &trans
-            &bt BT_CLR_ALL  &trans
+/* col      1           2           3           4           5           6           7       8             9             10            11             12 */
+/* row 0 */ &trans      &trans      &trans      &trans      &trans                          &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3   &bt BT_SEL 4
+/* row 1 */ &trans      &trans      &trans      &trans      &trans      &trans      &trans  &trans        &trans        &trans        &trans         &trans
+/* row 2 */ &trans      &trans      &trans      &trans      &trans      &bootloader &trans  &trans        &trans        &trans        &trans         &bt BT_CLR
+/* row 3 */ &to 0      &trans      &trans      &trans      &trans      &trans      &trans  &trans                                    &bt BT_CLR_ALL &trans
             >;
             sensor-bindings = <&scroll_up_down>;
         };
 
-        // ─────────────────────────────────────────────
-        //  Layer 5 — MOUSE
-        //  Trackball still moves cursor; keys = mouse buttons.
-        // ─────────────────────────────────────────────
         MOUSE {
             display-name = "Mouse";
             bindings = <
-/* row 0 */ &trans   &trans     &trans     &trans     &trans
-            &trans   &trans     &trans     &trans     &trans
-/* row 1 */ &trans   &mkp MB3   &mkp MB2   &mkp MB1   &trans   &trans
-            &trans   &mkp MB1   &mkp MB2   &mkp MB3   &trans   &trans
-/* row 2 */ &trans   &trans     &trans     &trans     &trans   &trans
-            &trans   &trans     &trans     &trans     &trans   &trans
-/* row 3 */ &trans   &trans     &trans     &trans     &trans   &trans
-            &trans   &trans
-            &trans   &trans
+/* col      1           2           3           4           5           6           7           8           9           10           11         12 */
+/* row 0 */ &trans      &trans      &trans      &trans      &trans                              &trans      &trans      &trans       &trans     &trans
+/* row 1 */ &trans      &mkp MB1    &mkp MB2    &mkp MB3    &trans      &trans      &trans      &trans      &mkp MB1    &mkp MB2    &mkp MB3    &trans     
+/* row 2 */ &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans       &trans     &trans
+/* row 3 */ &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans                               &trans     &trans
             >;
             sensor-bindings = <&scroll_up_down>;
         };
 
-        // ─────────────────────────────────────────────
-        //  Layer 6 — SCROLL
-        //  Trackball X/Y → scroll wheel (via trackball_listener override).
-        //  All keys transparent — activate from another layer with &mo SCROLL.
-        // ─────────────────────────────────────────────
         SCROLL {
             display-name = "Scroll";
             bindings = <
-/* row 0 */ &trans   &trans   &trans   &trans   &trans
-            &trans   &trans   &trans   &trans   &trans
-/* row 1 */ &trans   &trans   &trans   &trans   &trans   &trans
-            &trans   &trans   &trans   &trans   &trans   &trans
-/* row 2 */ &trans   &trans   &trans   &trans   &trans   &trans
-            &trans   &trans   &trans   &trans   &trans   &trans
-/* row 3 */ &trans   &trans   &trans   &trans   &trans   &trans
-            &trans   &trans
-            &trans   &trans
+/* col      1           2           3           4           5           6           7           8           9           10           11         12 */
+/* row 0 */ &trans      &trans      &trans      &trans      &trans                              &trans      &trans      &trans       &trans     &trans
+/* row 1 */ &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans       &trans     &trans
+/* row 2 */ &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans       &trans     &trans
+/* row 2 */ &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans                               &trans     &trans
             >;
             sensor-bindings = <&scroll_up_down>;
         };
