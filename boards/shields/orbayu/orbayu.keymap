@@ -100,7 +100,7 @@
             bindings = <
 /* col      1           2           3           4           5           6           7           8           9           10           11         12 */
 /* row 0 */ &kp N1      &kp N2      &kp N3      &kp N4      &kp N5                              &kp N6      &kp N7      &kp N8       &kp N9     &kp N0
-/* row 1 */ &trans      &trans      &kp LBKT    &kp RBKT    &trans      &trans      &trans      &trans      &kp LPAR    &kp RPAR     &trans     &kp BACKSLASH
+/* row 1 */ &trans      &trans      &kp LBKT    &kp RBKT    &trans      &kp C_MUTE  &trans      &trans      &kp LPAR    &kp RPAR     &trans     &kp BACKSLASH
 /* row 2 */ &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans       &trans     &kp PIPE
 /* row 3 */ &trans      &trans      &trans      &trans      &trans      &trans      &trans      &trans                               &trans     &trans
             >;
