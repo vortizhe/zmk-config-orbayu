@@ -23,6 +23,8 @@
     };
 };
 
-&encoder_0 {
+&left_encoder {
+    a-gpios = <&gpio0 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;   /* A = D0 (P0.02) */
+    b-gpios = <&gpio0 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;   /* B = D1 (P0.03) */
     status = "okay";
 };
